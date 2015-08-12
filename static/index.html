@@ -11,23 +11,25 @@
 
             <p>But first, a word from our sponsors:</p> <script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script>
         </header>
-        <button ng-click="goForProducts('size')">Size</button>
-        <button ng-click="goForProducts('price')">Price</button>
-        <button ng-click="goForProducts('id')">id</button>
-        <section class="products"  ng-init="goForProducts()">
+        <button ng-click="sortProducts('size')">Size</button>
+        <button ng-click="sortProducts('price')">Price</button>
+        <button ng-click="sortProducts('id')">id</button>
+        <section class="products"  ng-init="loadMoreProducts()">
+            <div ng-show="isLoading">Loading...</div>
             <div ng-repeat="product in products">
                 <div>ID:{{product.id}}</div>
-                <div>Face:{{product.face}}</div>
-                <div>Size:{{product.size}}</div>
-                <div>Price:{{product.price}}</div>
-                <div>Date:{{product.date}}</div>
+                <div ng-if="$index % 20 == 0"><script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script></div>
             </div>
-            <div ng-show="isLoading">Loading...</div>
         </section>
+        <scroll-in-the-end></scroll-in-the-end>
         <script src="/bower_components/angular/angular.js"></script>
         <script src="/bower_components/oboe/dist/oboe-browser.min.js"></script>
+        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+
         <script src="/app/app.js"></script>
         <script src="/app/controllers/productsController.js"></script>
         <script src="/app/services/productsFactory.js"></script>
+        <script src="/app/directives/scrollDirective.js"></script>
+        <script src="/app/directives/adDirective.js"></script>
     </body>
 </html>
