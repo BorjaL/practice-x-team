@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="warehouse">
     <head>
         <title>Discount Ascii Warehouse</title>
     </head>
@@ -12,8 +12,20 @@
             <p>But first, a word from our sponsors:</p> <script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script>
         </header>
 
-        <section class="products">
-            ... products go here ...
+        <section class="products" ng-controller="productsController" ng-init="goForProducts()">
+            <div ng-repeat="product in products">
+                <div>ID:{{product.id}}</div>
+                <div>Face:{{product.face}}</div>
+                <div>Size:{{product.size}}</div>
+                <div>Price:{{product.price}}</div>
+                <div>Date:{{product.date}}</div>
+            </div>
+            <div ng-show="isLoading">Loading...</div>
         </section>
+        <script src="/bower_components/angular/angular.js"></script>
+        <script src="/bower_components/oboe/dist/oboe-browser.min.js"></script>
+        <script src="/app/app.js"></script>
+        <script src="/app/controllers/productsController.js"></script>
+        <script src="/app/services/productsFactory.js"></script>
     </body>
 </html>
