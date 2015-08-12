@@ -1,0 +1,19 @@
+{
+  "name": "discount-ascii-warehouse",
+  "version": "0.0.1",
+  "authors": [
+    "BorjaL <borja.fpillado@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3",
+    "oboe": "~2.1.2"
+  }
+}
