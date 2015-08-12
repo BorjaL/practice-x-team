@@ -3,11 +3,11 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', functio
     $scope.products = [];
     $scope.isLoading = true;
 
-    $scope.goForProducts = function goForProducts(){
-
+    $scope.goForProducts = function goForProducts(sort_type){
+        console.log("Hola")
         startLoading();
-
-        productsFactory.getProducts({done: stopLoading}).then(
+        $scope.products = [];
+        productsFactory.getProducts({sort: sort_type, done: stopLoading}).then(
             function(){}, 
             function(error){
                 console.log("Something goes wrong while we went for products... sorry :(");

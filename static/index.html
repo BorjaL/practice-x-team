@@ -3,7 +3,7 @@
     <head>
         <title>Discount Ascii Warehouse</title>
     </head>
-    <body>
+    <body ng-controller="productsController">
         <header>
             <h1>Discount Ascii Warehouse</h1>
 
@@ -11,8 +11,10 @@
 
             <p>But first, a word from our sponsors:</p> <script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script>
         </header>
-
-        <section class="products" ng-controller="productsController" ng-init="goForProducts()">
+        <button ng-click="goForProducts('size')">Size</button>
+        <button ng-click="goForProducts('price')">Price</button>
+        <button ng-click="goForProducts('id')">id</button>
+        <section class="products"  ng-init="goForProducts()">
             <div ng-repeat="product in products">
                 <div>ID:{{product.id}}</div>
                 <div>Face:{{product.face}}</div>

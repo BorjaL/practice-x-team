@@ -5,19 +5,18 @@ warehouse.factory('productsFactory', ["$http", "$q", function ($http, $q){
 	service.getProducts = function(params){
 		var defer = $q.defer();
 
-		oboe('http://localhost:8000/api/products')
+		oboe('http://localhost:8000/api/products?sort=' + params.sort)
 		.fail(function (error){
+			defer.reject(error);
+		}).node("{id}", function (node) {
 
-            defer.reject(error);
-          }).node("{id}", function (node) {
-
-            defer.notify(node);
+			defer.notify(node);
             return oboe.drop;
-          }).done(function (){
+        }).done(function (){
 
           	params.done();
             return oboe.drop;
-          });
+        });
 
 		return defer.promise;
 	}
