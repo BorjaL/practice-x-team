@@ -5,7 +5,6 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', '$inter
     $scope.is_loading = true;
     $scope.sort_type
     $scope.last_random;
-    $scope.new_num;
 
 
     $scope.sortProducts = function (sort_type){
