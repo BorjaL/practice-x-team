@@ -18,7 +18,7 @@
             <div ng-show="isLoading">Loading...</div>
             <div ng-repeat="product in products">
                 <div>ID:{{product.id}}</div>
-                <div ng-if="($index % 20 == 0) && ($index != 0)"><advertising data-last_random="last_random" ></advertising></div>
+                <div ng-if="($index % 20 == 0) && ($index != 0)"><advertising random="random" ></advertising></div>
             </div>
         </section>
         <scroll-in-the-end></scroll-in-the-end>
