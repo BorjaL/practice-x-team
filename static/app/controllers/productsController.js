@@ -1,8 +1,8 @@
-warehouse.controller('productsController', ['$scope', 'productsFactory', '$interval', function($scope, productsFactory, $interval){
+warehouse.controller('productsController', ['$scope', 'productsFactory', '$interval', '$timeout', function($scope, productsFactory, $interval, $timeout){
 
     var products_cache = [];
     $scope.products = [];
-    $scope.is_loading = true;
+    $scope.is_loading = false;
     $scope.sort_type
     $scope.random = {
         last: 0
@@ -13,12 +13,22 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', '$inter
         $scope.sort_type = sort_type;
         $scope.products = [];
         products_cache = [];
-        goForProducts();
+        if ($scope.is_loading){
+            $timeout($scope.sortProducts(sort_type), 1000);
+        }
+        else{
+            goForProducts($scope.sort_type);
+        }
     }
 
     $scope.loadMoreProducts = function (){
         if (products_cache.length == 0){
-            goForProducts($scope.sort_type)
+            if ($scope.is_loading){
+                $timeout($scope.loadMoreProducts, 1000);
+            }
+            else{
+                goForProducts($scope.sort_type);
+            }
         }
         else{
             $scope.products = $scope.products.concat(products_cache.splice(0,10));
@@ -26,8 +36,8 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', '$inter
     }
 
     function goForProducts(){
-        startLoading();
         
+        startLoading();
         productsFactory.getProducts({offset: $scope.products.length, sort: $scope.sort_type, done: stopLoading}).then(
             function(){}, 
             function(error){
@@ -41,7 +51,9 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', '$inter
     };
 
     function goForCachedProducts(){
-        productsFactory.getProducts({offset: $scope.products.length + products_cache.length, sort: $scope.sort_type}).then(
+
+        startLoading();
+        productsFactory.getProducts({offset: $scope.products.length + products_cache.length, sort: $scope.sort_type, done: stopLoading}).then(
             function(){}, 
             function(error){},
             function(node) {
@@ -51,6 +63,7 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', '$inter
     }
 
     function stopLoading(){
+
         $scope.is_loading = false;
     };
 
@@ -60,9 +73,9 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', '$inter
 
     function idleLoadProducts(){
         $interval(function(){
-            //if ($scope.is_loading == false){
+            if ($scope.is_loading == false){
                 goForCachedProducts();
-            //}
+            }
         }, 5000);
     }
 

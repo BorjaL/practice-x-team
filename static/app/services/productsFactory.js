@@ -4,6 +4,7 @@ warehouse.factory('productsFactory', ["$http", "$q", function ($http, $q){
 
 	service.getProducts = function(params){
 		var defer = $q.defer();
+		var counter = 0;
 
 		oboe('http://localhost:8000/api/products?sort=' + params.sort + '&skip=' + params.offset)
 		.fail(function (error){
@@ -11,10 +12,13 @@ warehouse.factory('productsFactory', ["$http", "$q", function ($http, $q){
 		}).node("{id}", function (node) {
 
 			defer.notify(node);
+			counter++;
             return oboe.drop;
         }).done(function (data){
 
-          	//params.done();
+        	if (counter == 10){
+        		params.done();
+        	}
             return oboe.drop;
         });
 
