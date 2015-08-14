@@ -1,9 +1,8 @@
 warehouse.controller('ProductsController', ['$scope', 'productsFactory', '$interval', '$timeout', function($scope, productsFactory, $interval, $timeout){
 
     var products_cache = [];
-    var count_to_end = 0;
+    var is_loading = false;
     $scope.products = [];
-    $scope.is_loading = false;
     $scope.loading = true;
     $scope.end = false;
     $scope.sort_type = "id"
@@ -35,15 +34,14 @@ warehouse.controller('ProductsController', ['$scope', 'productsFactory', '$inter
         }
         else{
             goForProducts(false);
-            checkIfFinish();
         }
     }
 
     function goForProducts(isForCache){
         startLoading(isForCache);
-        $scope.end = true; 
+        activateEndFlag();
 
-        productsFactory.getProducts({limit: 20, offset: $scope.products.length + products_cache.length, sort: $scope.sort_type, done: stopLoading}).then(
+        productsFactory.getProducts({limit: 10, offset: $scope.products.length + products_cache.length, sort: $scope.sort_type, done: stopLoading}).then(
             function(){}, 
             function(error){
                 console.log("Something goes wrong while we went for products... sorry :(");
@@ -58,8 +56,6 @@ warehouse.controller('ProductsController', ['$scope', 'productsFactory', '$inter
                 else{
                     $scope.products.push(node);
                 }
-
-                count_to_end++;
             }
         );
 
@@ -82,8 +78,8 @@ warehouse.controller('ProductsController', ['$scope', 'productsFactory', '$inter
         }  
     }
 
-    function checkIfFinish(){
-
+    function activateEndFlag(){
+        $scope.end = true; 
     }
 
     function idleLoadProducts(){
@@ -91,7 +87,7 @@ warehouse.controller('ProductsController', ['$scope', 'productsFactory', '$inter
             if ($scope.is_loading == false){
                 goForProducts(true);
             }
-        }, 10000);
+        }, 5000);
     }
 
     idleLoadProducts();
