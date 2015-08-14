@@ -1,0 +1,30 @@
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.grid {
+  background: white;
+  margin: 0 0 20px 0;
+}
+.grid:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.grid .module:last-of-type {
+  padding-right: 0;
+}
+
+.product {
+	width: 33.33%;
+  	padding: 20px;
+  	float: left;
+  	padding-right: 20px;
+  	height: 240px;
+}
+
+body {
+  padding: 10px 50px 0px;
+}

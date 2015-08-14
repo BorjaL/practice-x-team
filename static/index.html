@@ -2,6 +2,7 @@
 <html ng-app="warehouse">
     <head>
         <title>Discount Ascii Warehouse</title>
+        <link href="/css/warehouse.css" type="text/css" rel="stylesheet" media="screen, projection">
     </head>
     <body ng-controller="productsController">
         <header>
@@ -11,16 +12,25 @@
 
             <p>But first, a word from our sponsors:</p> <script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script>
         </header>
-        <button ng-click="sortProducts('size')">Size</button>
-        <button ng-click="sortProducts('price')">Price</button>
-        <button ng-click="sortProducts('id')">id</button>
-        <section class="products"  ng-init="loadMoreProducts()">
-            <div ng-show="isLoading">Loading...</div>
-            <div ng-repeat="product in products">
-                <div>ID:{{product.id}}</div>
-                <div ng-if="($index % 20 == 0) && ($index != 0)"><advertising random="random" ></advertising></div>
-            </div>
-        </section>
+        <div class="grid">
+            <button ng-click="sortProducts('size')">Size</button>
+            <button ng-click="sortProducts('price')">Price</button>
+            <button ng-click="sortProducts('id')">id</button>
+            <section class="products"  ng-init="loadMoreProducts()">
+                <div ng-show="isLoading">Loading...</div>
+                <div ng-repeat="product in products">
+                    <div class="product">
+                        <div>ID:{{product.id}}</div>
+                        <div>{{product.face}}</div>
+                        <div>Price:{{'$' + (product.price /100)}}</div>
+                        <div><date-format date="{{product.date}}"></date-format></div>
+                    </div>
+                    <div class="product" ng-if="($index % 20 == 0) && ($index != 0)">
+                            <advertising random="random" ></advertising>
+                    </div>
+                </div>
+            </section>
+        </div>
         <scroll-in-the-end></scroll-in-the-end>
         <script src="/bower_components/angular/angular.js"></script>
         <script src="/bower_components/oboe/dist/oboe-browser.min.js"></script>
@@ -31,5 +41,6 @@
         <script src="/app/services/productsFactory.js"></script>
         <script src="/app/directives/scrollDirective.js"></script>
         <script src="/app/directives/adDirective.js"></script>
+        <script src="/app/directives/dateFormatDirective.js"></script>
     </body>
 </html>
