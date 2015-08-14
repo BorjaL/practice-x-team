@@ -10,10 +10,10 @@ warehouse.directive('scrollInTheEnd', function(){
 					scope.loadMoreProducts();
 				}
 			}
-
-			function areWeAtTheBottom() {
-				return ($(window).scrollTop() >= ($(document).height() - $(window).height()));
-			}
 		}
 	};
+
+	function areWeAtTheBottom() {
+		return ($(window).scrollTop() >= ($(document).height() - $(window).height()));
+	}
 });
