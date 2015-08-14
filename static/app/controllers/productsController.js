@@ -1,9 +1,12 @@
-warehouse.controller('productsController', ['$scope', 'productsFactory', '$interval', '$timeout', function($scope, productsFactory, $interval, $timeout){
+warehouse.controller('ProductsController', ['$scope', 'productsFactory', '$interval', '$timeout', function($scope, productsFactory, $interval, $timeout){
 
     var products_cache = [];
+    var count_to_end = 0;
     $scope.products = [];
     $scope.is_loading = false;
-    $scope.sort_type
+    $scope.loading = true;
+    $scope.end = false;
+    $scope.sort_type = "id"
     $scope.random = {
         last: 0
     }
@@ -13,70 +16,82 @@ warehouse.controller('productsController', ['$scope', 'productsFactory', '$inter
         $scope.sort_type = sort_type;
         $scope.products = [];
         products_cache = [];
-        if ($scope.is_loading){
-            $timeout($scope.sortProducts(sort_type), 1000);
-        }
-        else{
-            goForProducts($scope.sort_type);
-        }
+        checkAndGoProducts();
     }
 
     $scope.loadMoreProducts = function (){
         if (products_cache.length == 0){
-            if ($scope.is_loading){
-                $timeout($scope.loadMoreProducts, 1000);
-            }
-            else{
-                goForProducts($scope.sort_type);
-            }
+            checkAndGoProducts();
         }
         else{
             $scope.products = $scope.products.concat(products_cache.splice(0,10));
         }
     }
 
-    function goForProducts(){
+    function checkAndGoProducts(){
         
-        startLoading();
-        productsFactory.getProducts({offset: $scope.products.length, sort: $scope.sort_type, done: stopLoading}).then(
+        if ($scope.is_loading){
+            $timeout($scope.loadMoreProducts, 500);
+        }
+        else{
+            goForProducts(false);
+            checkIfFinish();
+        }
+    }
+
+    function goForProducts(isForCache){
+        startLoading(isForCache);
+        $scope.end = true; 
+
+        productsFactory.getProducts({limit: 20, offset: $scope.products.length + products_cache.length, sort: $scope.sort_type, done: stopLoading}).then(
             function(){}, 
             function(error){
                 console.log("Something goes wrong while we went for products... sorry :(");
-                stopLoading()
+                stopLoading();
             },
             function(node) {
-                $scope.products.push(node);
+                $scope.end = false;
+
+                if (isForCache){
+                    products_cache.push(node);
+                }
+                else{
+                    $scope.products.push(node);
+                }
+
+                count_to_end++;
             }
         );
+
     };
-
-    function goForCachedProducts(){
-
-        startLoading();
-        productsFactory.getProducts({offset: $scope.products.length + products_cache.length, sort: $scope.sort_type, done: stopLoading}).then(
-            function(){}, 
-            function(error){},
-            function(node) {
-                products_cache.push(node);
-            }
-        );
-    }
 
     function stopLoading(){
 
         $scope.is_loading = false;
+
+        if ($scope.loading){
+            $scope.loading = false;
+        }
     };
 
-    function startLoading(){
+    function startLoading(isForCache){
         $scope.is_loading = true;
+
+        if (!isForCache){
+            $scope.loading = true;
+        }  
+    }
+
+    function checkIfFinish(){
+
     }
 
     function idleLoadProducts(){
         $interval(function(){
             if ($scope.is_loading == false){
-                goForCachedProducts();
+                goForProducts(true);
             }
-        }, 5000);
+        }, 10000);
     }
 
     idleLoadProducts();

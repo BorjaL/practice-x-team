@@ -4,7 +4,7 @@
         <title>Discount Ascii Warehouse</title>
         <link href="/css/warehouse.css" type="text/css" rel="stylesheet" media="screen, projection">
     </head>
-    <body ng-controller="productsController">
+    <body ng-controller="ProductsController">
         <header>
             <h1>Discount Ascii Warehouse</h1>
 
@@ -12,18 +12,20 @@
 
             <p>But first, a word from our sponsors:</p> <script>document.write('<img class="ad" src="/ad/?r=' + Math.floor(Math.random()*1000) + '"/>');</script>
         </header>
-        <div class="grid">
+        <div class="sort">
+            Sort by:
             <button ng-click="sortProducts('size')">Size</button>
             <button ng-click="sortProducts('price')">Price</button>
             <button ng-click="sortProducts('id')">id</button>
+        </div>
+        <div class="grid">
             <section class="products"  ng-init="loadMoreProducts()">
-                <div ng-show="isLoading">Loading...</div>
-                <div ng-repeat="product in products">
+                <div ng-repeat="product in products track by product.id">
                     <div class="product">
                         <div>ID:{{product.id}}</div>
-                        <div>{{product.face}}</div>
                         <div>Price:{{'$' + (product.price /100)}}</div>
                         <div><date-format date="{{product.date}}"></date-format></div>
+                        <div style="font-size:{{product.size}}px">{{product.face}}</div>
                     </div>
                     <div class="product" ng-if="($index % 20 == 0) && ($index != 0)">
                             <advertising random="random" ></advertising>
@@ -31,6 +33,14 @@
                 </div>
             </section>
         </div>
+        <div class="spinner" ng-show="loading" >
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+        <div ng-show="end" style="clear: both;text-align: center;">~ end of catalogue ~</div>
         <scroll-in-the-end></scroll-in-the-end>
         <script src="/bower_components/angular/angular.js"></script>
         <script src="/bower_components/oboe/dist/oboe-browser.min.js"></script>
